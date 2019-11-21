@@ -30,7 +30,9 @@ class IpFilter extends AbstractEndpoint
         $domain,
         $type,
         $value,
-        $enabled = true
+        $enabled = true,
+        \DateTime $expires = null,
+        $comment = null
     ) {
         $uri = $this->uri . '/' . $domain;
 
@@ -41,7 +43,10 @@ class IpFilter extends AbstractEndpoint
                 'value'   => $value,
                 'enabled' => $enabled,
             ];
-
+        if( !empty( $expires ) )
+            $options[RequestOptions::JSON][ 'expireDate' ] = $expires->format( 'c' );
+        if( !empty( $comment ) )
+            $options[RequestOptions::JSON][ 'comment' ] = $comment;
 
         /** @var \GuzzleHttp\Psr7\Response $res */
         $res = $this->client->request('PUT', $uri, $options);
@@ -55,7 +60,9 @@ class IpFilter extends AbstractEndpoint
         $id,
         \DateTime $modified,
         $type,
-        $value
+        $value,
+        \DateTime $expires = null,
+        $comment = null
     ) {
         $uri = $this->uri . '/' . $domain;
 
@@ -67,6 +74,11 @@ class IpFilter extends AbstractEndpoint
                 'type'     => $type,
                 'value'    => $value,
             ];
+        if( !empty( $expires ) )
+            $options[RequestOptions::JSON][ 'expireDate' ] = $expires->format( 'c' );
+        if( !empty( $comment ) )
+            $options[RequestOptions::JSON][ 'comment' ] = $comment;
+
         /** @var \GuzzleHttp\Psr7\Response $res */
         $res = $this->client->request('POST', $uri, $options);
 
